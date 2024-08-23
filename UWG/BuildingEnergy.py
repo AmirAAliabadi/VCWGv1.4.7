@@ -539,15 +539,6 @@ class Building(object):
         # Latent heat load per unit building footprint area [W m^-2]
         QLintload = self.intHeat * self.intHeatFLat
 
-        # Name each term for post processing - Delete these after trouble shooting
-        self.QWall = wallArea * zac_in_wall * (T_wall - T_cool)
-        self.QMass = massArea * zac_in_mass * (T_mass - T_cool)
-        self.QWindow = winArea * self.uValue * (self.Tcanyon - T_cool)
-        self.QCeil = ceilingArea * zac_in_ceil * (T_ceil - T_cool)
-        self.QInfil = volInfil * dens * parameter.cp * (self.Tcanyon - T_cool)
-        self.QVen = volVent * dens * parameter.cp * (self.Tcanyon - T_cool)
-        self.QWindowSolar = winTrans
-
         # -------------------------------------------------------------
         # HVAC system (cooling demand = [W m^-2] bld footprint)
         # -------------------------------------------------------------
