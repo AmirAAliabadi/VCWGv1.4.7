@@ -63,7 +63,7 @@ ZONETYPE = [
     '6B (Helena)',              # 14
     '7 (Duluth)',               # 15
     '8 (Fairbanks)',            # 16
-    '5A (Guelph)'               # 17
+    'Custom'                    # 17
     ]
 
 def readDOE(serialize_output=True):
@@ -201,7 +201,7 @@ def readDOE(serialize_output=True):
                     (HVAC[j][k]*1000.0)/AreaFloor[j],   # coolCap converted from kW per entire floor area to Watt per unit floor area [W m^-2]
                     EffHeat[j][k],                      # heatEff by area, climate type
                     293,                                # initialTemp [K]
-                    0.006)                              # initialTemp specific humidity  [kgv kga^-1]
+                    0.006)                              # initialHum  [kgv kga^-1]
 
                 #Not defined in the constructor
                 B.heatCap = (HEAT[j][k]*1000.0)/AreaFloor[j]         # heating Capacity converted to [W m^-2] by area, climate type
@@ -238,7 +238,7 @@ def readDOE(serialize_output=True):
                         thickness = [0.0254,0.0508,0.0508,0.0508,0.0508,D_ins,0.0127]
                         layers = [Brick,Concrete,Concrete,Concrete,Concrete,Insulation,Gypsum]
                     else:
-                        #if it's less then 1 cm don't include in layers
+                        #if it's less than 1 cm don't include in layers
                         thickness = [0.0254,0.0508,0.0508,0.0508,0.0508,0.0127]
                         layers = [Brick,Concrete,Concrete,Concrete,Concrete,Gypsum]
 
