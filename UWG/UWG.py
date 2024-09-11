@@ -952,6 +952,7 @@ class UWG(object):
         TKE_hourly = numpy.zeros((len(Output_TimInd_new), self.nz))
         sensWaste_hourly = numpy.zeros(len(Output_TimInd_new))
         dehumDemand_hourly = numpy.zeros(len(Output_TimInd_new))
+        humDemand_hourly = numpy.zeros(len(Output_TimInd_new))
         QWater_hourly = numpy.zeros(len(Output_TimInd_new))
         QGas_hourly = numpy.zeros(len(Output_TimInd_new))
         sensCoolDemand_hourly = numpy.zeros(len(Output_TimInd_new))
@@ -1582,6 +1583,7 @@ class UWG(object):
                   # Save building energy terms
                   sensWaste_hourly[iO_new] = self.BEM[0].building.sensWaste
                   dehumDemand_hourly[iO_new] = self.BEM[0].building.dehumDemand
+                  humDemand_hourly[iO_new] = self.BEM[0].building.humDemand
                   QWater_hourly[iO_new] = self.BEM[0].building.QWater
                   QGas_hourly[iO_new] = self.BEM[0].building.QGas
                   sensCoolDemand_hourly[iO_new] = self.BEM[0].building.sensCoolDemand
@@ -1770,17 +1772,17 @@ class UWG(object):
         outputFile_BEM = open(timeseriesFilename, "w")
         outputFile_BEM.write("#### \t Vertical City Weather Generator (VCWG)  \t #### \n")
         outputFile_BEM.write("# Hourly building energy data \n")
-        outputFile_BEM.write("# 0:time [hr] 1:sensWaste (Total Sensible waste heat per unit building footprint area including cool heat dehum water and gas) [W m^-2] 2:dehumDemand (Latent heat demand for dehumidification of air per unit building footprint area) [W m^-2] 3:QWater (Water heating waste heat) [W m^-2] 4:QGas [W m^-2] "
-                             "5: sensCoolDemand (building sensible cooling demand per unit building footprint area) [W m^-2] 6:coolConsump (cooling energy consumption per unit building footprint area OR per unit floor area) [W m^-2] 7:sensHeatDemand (building sensible heating demand per unit building footprint area) [W m^-2] 8: heatConsump (heating energy consumption per unit floor area) [W m^-2] "
-                             "9: waterHeatConsump (water heating energy consumption per unit floor area) [W m^-2] 10: Q_st (solar thermal) [W m^-2] 11: Q_he_st (solar thermal heat exchanger) [W m^-2] 12: Q_bites (energy storage) [W m^-2] 13: Q_hp (Heat flux from auxiliary HP) [W m^-2] 14: Q_recovery (Recovery heat) [W m^-2] "
-                             "15: W_hp (Electricity consumed by auxiliary HP) [W m^-2] 16: W_pv (Electricity produced by PV) [W m^-2] 17: COP_hp (COP of auxiliary HP) "
-                             "18: indoorTemp (indoor air temperature) [K] 19: T_st_f_i (ST working fluid inlet initial temperature) [K] 20: T_st_f_o (ST working fluid outlet initial temperature) [K] 21: T_he_st_i (ST heat exchanger air inlet initial temperature) [K] 22: T_he_st_o (ST heat exchanger air outlet initial temperature) [K] 23: T_bites (BITES initial temperature) [K] "
-                             "24: W_wt (Electricity produced by wind turbine) [W m^-2] 25: f_pcm (Fraction of PCM melted)  26: Q_waterSaved (Heat flux saved for water heating) [W m^-2] 27: sensWaterHeatDemand (building sensible water heating demand per unit building footprint area) [W m^-2] "
-                             "28: Q_ground (Ground heat flux from deep soil to BITES) [W m^-2] 29: elecDomesticDemand (Electricity demand for appliances and lighting (not for energy) per building footprint area) [W m^-2] 30: Q_waterRecovery (Recovery heat from domestic water (heating mode)) [W m^-2] "
-                             "31: Canyon Temperature [K] 32: Infiltration Rate (includes windows) [ACH] or [hr^-1] 33: Ventilation Rate (forced air) [m^3 s^-1 m^-2]  34: HVAC Flag (0 = Fully Conditioned, 1 = Natural Ventilation and Conditioned) 35: Window State (0 = closed 1 = open) 36: indoorHum (indoor specific humidity) [kgv kga^-1] 37: Canyon Humidity [kgv kga^-1] \n")
+        outputFile_BEM.write("# 0:time [hr] 1:sensWaste [W m^-2] 2:dehumDemand [W m^-2] 3:humDemand [W m^-2] 4:QWater [W m^-2] 5:QGas [W m^-2] "
+                             "6: sensCoolDemand [W m^-2] 7:coolConsump [W m^-2] 8:sensHeatDemand [W m^-2] 9: heatConsump [W m^-2] "
+                             "10: waterHeatConsump [W m^-2] 11: Q_st [W m^-2] 12: Q_he_st [W m^-2] 13: Q_bites [W m^-2] 14: Q_hp [W m^-2] 15: Q_recovery [W m^-2] "
+                             "16: W_hp [W m^-2] 17: W_pv [W m^-2] 18: COP_hp "
+                             "19: indoorTemp [K] 20: T_st_f_i [K] 21: T_st_f_o [K] 22: T_he_st_i [K] 23: T_he_st_o [K] 24: T_bites [K] "
+                             "25: W_wt [W m^-2] 26: f_pcm 27: Q_waterSaved [W m^-2] 28: sensWaterHeatDemand [W m^-2] "
+                             "29: Q_ground [W m^-2] 30: elecDomesticDemand [W m^-2] 31: Q_waterRecovery [W m^-2] "
+                             "32: Canyon Temperature [K] 33: Infiltration Rate [ACH] or [hr^-1] 34: Ventilation Rate [m^3 s^-1 m^-2] 35: HVAC Flag 36: Window State 37: indoorHum [kgv kga^-1] 38: Canyon Humidity [kgv kga^-1] \n")
         for i in range(0,len(Output_TimInd_new)):
-            outputFile_BEM.write("%i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %i %f %f %f \n"
-                                 % (i,sensWaste_hourly[i],dehumDemand_hourly[i],QWater_hourly[i],QGas_hourly[i],sensCoolDemand_hourly[i],
+            outputFile_BEM.write("%i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %i %f %f %f \n"
+                                 % (i,sensWaste_hourly[i],dehumDemand_hourly[i],humDemand_hourly[i],QWater_hourly[i],QGas_hourly[i],sensCoolDemand_hourly[i],
                                     coolConsump_hourly[i],sensHeatDemand_hourly[i], heatConsump_hourly[i], waterHeatConsump_hourly[i],
                                     Q_st_hourly[i],Q_he_st_hourly[i],Q_bites_hourly[i], Q_hp_hourly[i], Q_recovery_hourly[i],
                                     W_hp_hourly[i], W_pv_hourly[i], COP_hp_hourly[i],

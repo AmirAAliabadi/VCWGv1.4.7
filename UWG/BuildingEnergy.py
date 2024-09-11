@@ -8,81 +8,9 @@ import math
 Calculate building characteristics
 Developed by Mojtaba Safdari, Mohsen Moradi, Amir A. Aliabadi
 Atmospheric Innovations Research (AIR) Laboratory, University of Guelph, Guelph, Canada
-Last update: 2024-02-20
+Last update: 2024-09-06
 """
 class Building(object):
-    """
-
-    properties
-        % Building parameters
-        floorHeight         % floor height [m]
-        intHeat;            % time step internal heat gains per unit floor area [W m^-2] (bld) (sensible only)
-        intHeatNight;       % nighttime internal heat gains per unit floor area [W m^-2] (floor)
-        intHeatDay;         % daytime internal heat gains per unit floor area [W m^-2] (floor)
-        intHeatFRad;        % radiant fraction of internal gains
-        intHeatFLat;        % latent fraction of internal gains
-        infilBase;          % Baseline Infiltration Air Change per Hour (ACH) [hr^-1] (excludes natural ventilation)
-        infil;              % Infiltration Air Change per Hour (ACH) [hr^-1] (includes natural ventilation if enabled)
-        vent;               % Ventilation rate per unit floor area [m^3 s^-1 m^-2]
-        glazingRatio;       % glazing ratio
-        uValue;             % window U-value [W m^-2 K^-1] (including film coeff)
-        shgc;               % window Solar Heat Gain Coefficient (SHGC)
-        condType;           % cooling condensation system type {'AIR', 'WATER'}
-        cop;                % COP of the cooling system (nominal)
-        coolSetpointDay;    % daytime indoor cooling set-point [K]
-        coolSetpointNight;  % nighttime indoor cooling set-point [K]
-        heatSetpointDay;    % daytime indoor heating set-point [K]
-        heatSetpointNight;  % nighttime indoor heating set-point [K]
-        coolRHSetpointDay;  % daytime indoor cooling RH set-point [%]
-        coolRHSetpointNight;% nighttime indoor cooling RH set-point [%]
-        heatRHSetpointDay;  % daytime indoor heating RH set-point [%]
-        heatRHSetpointNight;% nighttime indoor heating RH set-point [%]
-        coolCap;            % rated cooling system capacity [W m^-2]
-        heatCap;            % rated heating system capacity [W m^-2]
-        heatEff;            % heating system efficiency (-)
-        canyon_fraction     # fraction of waste heat released to canyon, default = 1
-        mSys;               % HVAC supply mass flowrate [kg s^-1 m^-2]
-        indoorTemp;         % indoor air temperature [K]
-        indoorHum;          % indoor specific humidity [kgv kga^-1]
-        Twb;                % wetbulb temperature [C]
-        Tdp;                % dew point [C]
-        indoorRhum;         % indoor relative humidity [%]
-
-        area_floor;         % total floor space of the BEM
-        FanMax;             % max fan flow rate [m^3 s^-1] per DOE
-        nFloor;             % number of floors
-        RadFOcc;            % Radiant fraction of occupant
-        LatFOcc;            % Latent fraction of occupant
-        RadFEquip;          % Radiant fraction of equipment
-        RadFLight;          % Radiant fraction of light
-
-        Type;               % DOE reference building type
-        Era;                % PRE80, PST80, NEW
-        Zone;               % Climate zone number
-
-        % Calculated values
-        sensCoolDemand;     % building sensible cooling demand per unit building footprint area [W m^-2]
-        sensHeatDemand;     % building sensible heating demand per unit building footprint area [W m^-2]
-        copAdj;             % adjusted COP per temperature
-        dehumDemand;        % Latent heat demand for dehumidification of air per unit building footprint area [W m^-2]
-        coolConsump;        % cooling energy consumption per unit building footprint area OR per unit floor area [W m^-2]
-        heatConsump;        % heating energy consumption per unit floor area [W m^-2]
-        waterHeatConsump;   % water heating consumption [W m^-2]
-        sensWaste;          % sensible waste heat per unit building footprint area [W m^-2]
-        latWaste;           % lat waste heat per unit building footprint area [W m^-2]
-        fluxMass;           % mass surface heat flux [W m^-2] (mass to indoor air)
-        fluxWall;           % wall surface heat flux [W m^-2] (wall to inside)
-        fluxRoof;           % roof surface heat flux [W m^-2] (roof to inside)
-        fluxSolar;          % solar heat gain per unit floor area [W m^-2] through window (SHGC)
-        fluxWindow;         % heat gain/loss from window per unit floor area [W m^-2] (U-value)
-        fluxInterior;       % internal heat gain adjusted for latent/LW heat per unit floor area [W m^-2]
-        fluxInfil;          % heat flux from infiltration per unit floor area [W m^-2]
-        fluxVent;           % heat flux from ventilation per unit floor area [W m^-2]
-        ElecTotal;          % total electricity consumption per unit floor area [W m^-2]
-        GasTotal;           % total gas consumption per unit floor area [W m^-2]
-        Qhvac;              % total heat removed (sensible + latent) per unit building footprint area [W m^-2] (calculated in cooling system)
-        Qheat;              % total heat added (sensible only) per unit building footprint area [W m^-2] (calculated in heating system)
-    """
 
     TEMPERATURE_COEFFICIENT_CONFLICT_MSG = "FATAL ERROR!"
 
@@ -90,8 +18,7 @@ class Building(object):
             intHeatFLat,infil,vent,glazingRatio,uValue,shgc,\
             condType,cop,coolSetpointDay,coolSetpointNight,\
             heatSetpointDay,heatSetpointNight,coolRHSetpointDay, coolRHSetpointNight,\
-            heatRHSetpointDay, heatRHSetpointNight,\
-            coolCap,heatEff,initialTemp,initialHum):
+            heatRHSetpointDay, heatRHSetpointNight,coolCap,heatEff,initialTemp,initialHum):
 
             self.floorHeight =float(floorHeight)            # floor height
             self.intHeat = intHeatNight                     # timestep internal sensible heat gain per unit floor area [W m^-2]
@@ -115,13 +42,9 @@ class Building(object):
             self.coolRHSetpointNight = coolRHSetpointNight  # nighttime indoor heating RH setpoint [%]
             self.heatRHSetpointDay = heatRHSetpointDay      # daytimge indoor heating RH setpoint [%]
             self.heatRHSetpointNight = heatRHSetpointNight  # nighttime indoor heating RH setpoint [%]
-            self.coolCap = coolCap                          # rated cooling system capacity per floor area [W m^-2]
             self.heatEff = heatEff                          # heating system capacity (-)
-            # HVAC supply mass flowrate [kg s^-1 m^-2]
-            self.mSys = coolCap/1004./(min(coolSetpointDay,coolSetpointNight)-14-273.15)
             self.indoorTemp = initialTemp                   # Indoor Air Temperature [K]
             self.indoorHum = initialHum                     # Indoor specific humidity [kgv kga^-1]
-            self.heatCap = 999                              # rated heating system capacity per floor area [W m^-2]
             self.copAdj = cop                               # adjusted COP per temperature
             self.canyon_fraction = 1.0                      # Default canyon fraction
 
@@ -182,8 +105,10 @@ class Building(object):
         self.heatConsump  = 0.0                         # heating energy consumption per unit floor area [W m^-2]
         self.waterHeatConsump = 0.0                     # water heating consumption [W m^-2]
         self.sensWaste = 0.0                            # Total Sensible waste heat per unit building footprint area including cool, heat, dehum, water, and gas [W m^-2]
-        self.sensWasteCoolHeatDehum = 0.0               # Sensible waste heat per unit building footprint area only including cool, heat, and dehum [W m^-2]
-        self.dehumDemand  = 0.0                         # Latent heat demand for dehumidification of air per unit building footprint area [W m^-2]
+        self.sensWasteCoolHeatLatent = 0.0              # Sensible waste heat per unit building footprint area only including cool, heat, and dehum [W m^-2]
+        self.latentDemand = 0.0                         # Latent demand per unit building footprint area [W m^-2]
+        self.dehumDemand  = 0.0                         # Latent demand (dehumidification) per unit building footprint area [W m^-2]
+        self.humDemand = 0.0                            # Latent demand (humidification) per unit building footprint area [W m^-2]
         self.Qhvac = 0.0                                # Total heat removed (sensible + latent)
         self.elecDomesticDemand = 0.0                   # Electricity demand for appliances and lighting (not for energy) per building footprint area [W m^-2]
         self.Q_st = 0                                   # Heat flux from ST [W m^-2]
@@ -568,21 +493,11 @@ class Building(object):
                 self.Q_hp = 0
                 self.W_hp = 0
 
-            # Calculate dehumidification demand from infiltration, ventilation, and internal sources
-            self.dehumDemand = QLinfil + QLvent + QLintload
+            # Calculate latent demand from infiltration, ventilation, and internal sources
+            self.latentDemand = QLinfil + QLvent + QLintload
 
-            # Calculate total cooling demand in per unit building footprint area [W m^-2]
-            # if cooling energy demand is greater then HVAC cooling capacity
-            if (self.dehumDemand + self.sensCoolDemand) > (self.coolCap * self.nFloor):
-                self.Qhvac = self.coolCap * self.nFloor
-                # Part load ratio
-                PLR = (self.coolCap * self.nFloor) / (self.dehumDemand + self.sensCoolDemand)
-                # For option 1 above, we need to discount VolDehum
-                # VolDehum = VolDehum * PLR
-                self.sensCoolDemand = self.sensCoolDemand * PLR
-                self.dehumDemand = self.dehumDemand * PLR
-            else:
-                self.Qhvac = self.dehumDemand + self.sensCoolDemand
+            self.dehumDemand = max(self.latentDemand, 0.0)
+            self.humDemand = max(-self.latentDemand, 0.0)
 
             # Calculate input work required by the refrigeration cycle per unit building footprint area [W m^-2]
             # COP = QL/Win or Win = QL/COP
@@ -591,11 +506,11 @@ class Building(object):
             # Calculate waste heat from HVAC system per unit building footprint area [W m^-2]
             # Using 1st law of thermodynamics QH = Win + QL
             if (self.condType == 'AIR'):
-                self.sensWasteCoolHeatDehum = max(self.sensCoolDemand+self.dehumDemand,0)+self.coolConsump
+                self.sensWasteCoolHeatLatent = max(self.sensCoolDemand+self.dehumDemand,0)+self.coolConsump
                 self.latWaste = 0.0
             # We have not tested this option; it must be investigated further
             elif (self.condType == 'WAT'):
-                self.sensWasteCoolHeatDehum = max(self.sensCoolDemand+self.dehumDemand,0)+self.coolConsump*(1.-evapEff)
+                self.sensWasteCoolHeatLatent = max(self.sensCoolDemand+self.dehumDemand,0)+self.coolConsump*(1.-evapEff)
                 self.latWaste = max(self.sensCoolDemand+self.dehumDemand,0)+self.coolConsump*evapEff
 
             self.sensHeatDemand = 0.
@@ -636,16 +551,19 @@ class Building(object):
                 self.W_hp = 0
 
             # Calculate total heating demand in per unit building footprint area [W m^-2]
-            # Heating demand must be less than or equal to heating capacity
-            self.Qheat = min(self.sensHeatDemand, self.heatCap*self.nFloor)
+            self.Qheat = self.sensHeatDemand
+
             # Calculate the energy consumption of the heating system per unit building footprint area [W m^-2] from heating demand divided by efficiency
-            self.heatConsump  = self.Qheat / self.heatEff
+            self.heatConsump  = (self.Qheat + self.humDemand) / self.heatEff
             # Calculate waste heat from HVAC system per unit building footprint area [W m^-2]
             # Excess heat generated by the heating system is rejected to the environment
-            self.sensWasteCoolHeatDehum = self.heatConsump - self.Qheat
+            self.sensWasteCoolHeatLatent = self.heatConsump - (self.Qheat + self.humDemand)
 
-            # Calculate dehumidification demand from infiltration, ventilation, and internal sources
-            self.dehumDemand = QLinfil + QLvent + QLintload
+            # Calculate latent demand from infiltration, ventilation, and internal sources
+            self.latentDemand = QLinfil + QLvent + QLintload
+
+            self.dehumDemand = max(self.latentDemand, 0.0)
+            self.humDemand = max(-self.latentDemand, 0.0)
 
             self.sensCoolDemand = 0.0
 
@@ -677,9 +595,9 @@ class Building(object):
         self.indoorTemp = (H1 + Q)/H2
 
         # Rearrange the building latent heat load equation to solve for the indoor air specific humidity
-        # QLinfil + QLvent = self.dehumDemand - QLintload (left hand side has qin but right hand side does not)
+        # QLinfil + QLvent = self.latentDemand - QLintload (left hand side has qin but right hand side does not)
         # Explicit terms which either do not contain qin or contain qin from previous iteration
-        QL = self.dehumDemand - QLintload
+        QL = self.latentDemand - QLintload
         HL1 = volInfil * dens * parameter.lv * self.qcanyon + volVent * dens * parameter.lv * self.qcanyon
         # Implicit terms which directly contain coefficient for newest qin to be solved
         HL2 = volInfil * dens * parameter.lv + volVent * dens * parameter.lv
@@ -844,7 +762,7 @@ class Building(object):
 
         # Calculate total sensible waste heat to canyon per unit building footprint area [W m^-2]
         # which can be determined from sensible waste to canyon, energy consumption for domestic hot water and gas consumption
-        self.sensWaste = self.sensWasteCoolHeatDehum + self.QWater + self.QGas
+        self.sensWaste = self.sensWasteCoolHeatLatent + self.QWater + self.QGas
         # Calculate total gas consumption per unit floor area [W m^-2] which is equal to gas consumption per unit floor area +
         # energy consumption for domestic hot water per unit floor area + energy consumption of the heating system per unit floor area
         self.GasTotal = BEM.Gas + (massFlowRateSWH*CpH20*(T_hot - forc.waterTemp)/self.nFloor)/self.heatEff + self.heatConsump/self.nFloor
