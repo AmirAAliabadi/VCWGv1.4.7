@@ -34,7 +34,7 @@ HVAC_street_frac,1,     # Fraction of Sensible waste heat from building released
 # Building Energy Model
 # =================================================
 # HVAC system and internal loads
-glzR,0.32,      # Glazing Ratio (0 - 1)
+glzR,0.40,      # Glazing Ratio (0 - 1)
 autosize,0,     # autosize HVAC (1 for yes; 0 for no)
 sensOcc,100,    # Sensible heat per occupant (W)
 LatFOcc,0.3,    # Latent heat fraction from occupant (normally 0.3)
