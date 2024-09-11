@@ -5,7 +5,7 @@ import os
 
 epw_filename = 'ERA5-Toronto-2020.epw'
 initialization_name = 'initialize_Toronto'
-case_name = 'Toronto-2020-NV'
+case_name = 'Toronto-2020-PassiveHouse-NV'
 Months = ['Jan.txt', 'Feb.txt', 'Mar.txt', 'Apr.txt', 'May.txt', 'Jun.txt', 'Jul.txt', 'Aug.txt', 'Sep.txt', 'Oct.txt', 'Nov.txt', 'Dec.txt']
 OutputData = ['BEM', 'q_profiles', 'Tepw', 'TKE_profiles', 'Tr_profiles', 'Tu_profiles', 'U_profiles', 'V_profiles']
 
