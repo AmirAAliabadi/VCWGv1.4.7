@@ -569,11 +569,11 @@ class Building(object):
         # Rearrange the building sensible heat load equation to solve for the indoor air temperature
         # Explicit terms which either do not contain Tin or contain Tin from previous iteration
         if Adv_ene_heat_mode == 0:
-            Q = self.intHeat + winTrans + self.sensHeatDemand - self.sensCoolDemand - self.Q_hp
+            Q = -self.intHeat - winTrans - self.sensHeatDemand + self.sensCoolDemand + self.Q_hp
         if Adv_ene_heat_mode == 1:
-            Q = self.intHeat + winTrans + self.sensHeatDemand - self.sensCoolDemand + self.Q_hp
+            Q = -self.intHeat - winTrans - self.sensHeatDemand + self.sensCoolDemand - self.Q_hp
         if (Adv_ene_heat_mode == 2) or (Adv_ene_heat_mode == 3):
-            Q = self.intHeat + winTrans + self.sensHeatDemand - self.sensCoolDemand
+            Q = -self.intHeat - winTrans - self.sensHeatDemand + self.sensCoolDemand
         H1 = (T_wall*wallArea*zac_in_wall +
             T_mass*massArea*zac_in_mass +
             T_ceil*ceilingArea*zac_in_ceil +
@@ -588,7 +588,7 @@ class Building(object):
             volInfil * dens * parameter.cp +
             volVent * dens * parameter.cp)
         # Calculate indoor air temperature [K]
-        self.indoorTemp = (H1 + Q)/H2
+        self.indoorTemp = (H1 - Q)/H2
 
         # Rearrange the building latent heat load equation to solve for the indoor air specific humidity
         # QLinfil + QLvent = self.latentDemand - QLintload (left hand side has qin but right hand side does not)
