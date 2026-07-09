@@ -1,4 +1,7 @@
-from RayTracing import RayTracingCal
+try:
+    from .RayTracing import RayTracingCal   # when run as part of the UWG package
+except ImportError:
+    from RayTracing import RayTracingCal    # when run directly/standalone
 import numpy
 import time
 import math
@@ -17,7 +20,7 @@ Originally developed by Naika Meili
 # OPTION_RAY = 1 does not overwrite file 'ViewFactor_BASEL.txt'.
 # This will only run the analytical model and copy ray-tracing results from the file.
 OPTION_RAY = 0
-ViewFactor_file = 'ViewFactor_Guelph_CoopHousing.txt'
+ViewFactor_file = 'ViewFactor_Toronto.txt'
 # Make sure the following parameters are the same as the initialization file.
 Width_canyon = 54   # [m]
 Height_canyon = 3   # [m]

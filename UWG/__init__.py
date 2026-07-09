@@ -23,7 +23,7 @@ from .ReadDOE import readDOE
 from .UrbFlux import urbflux
 
 from .UWG import UWG #from UWG.py import class UWG
-from UWG import procMat
+from .UWG import procMat
 
 
 __all__ = [
